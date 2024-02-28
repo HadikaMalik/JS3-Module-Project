@@ -2,38 +2,36 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TV Show Project | Hadika Malik (HadikaMalik)</title>
-  <link href="style.css" rel="stylesheet" />
-  <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+  <link href="style.css" rel="stylesheet">
+  <link rel="icon" href="/favicon.ico" type="image/x-icon">
+  <!-- Loads YOUR javascript code -->
+  <script defer src="script.js"></script>
 </head>
 
-
 <body>
-  <div id="root">
-    <template id="film-card">
-      <section>
-        <section id="box-border">
-          <section id="title-section">
-            <h3>Episode title</h3>
-            <p id="season-number"></p>
-          </section>
-        </section>
-        <img id="medium-img"></img>
-        <p id="summary"></p>
-      </section>
-    </template>
-  </div>
-  <!-- Loads a provided function called getAllEpisodes() which returns all episodes -->
-  <script src="episodes.js"></script>
+  <section id="film-container">
+    <select id="show-select">
+      <option value="" selected disabled>Select a show</option>
+    </select>
+    <select name="list" id="select">
+      <option value="" selected disabled>Select your episode</option>
+    </select>
+    <label>
+      <input type="search" id="q" name="q" placeholder="Search term" />
+    </label>
+    <span id="search-info"></span>
+    <a href="#" id="back-to-shows" style="display: none;">
+      <button>Back to Shows</button>
+    </a>
+  </section>
+  <div id="root"></div>
 
-  <!-- Loads YOUR javascript code -->
-  <script src="script.js"></script>
+  <footer>
+    <p>Data sourced from <a href="https://www.tvmaze.com/shows/82/game-of-thrones/episodes">TVMaze.com</a></p>
+  </footer>
 </body>
-
-<footer>
-  <p>Data sourced from <a href="https://www.tvmaze.com/shows/82/game-of-thrones/episodes">TVMaze.com</a></p>
-</footer>
 
 </html>

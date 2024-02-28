@@ -10,6 +10,7 @@ body{
   margin: 10px 40px;
 }
 
+
 #title-section{
   display: flex;
   flex-direction: row;
@@ -48,4 +49,18 @@ section {
 #summary{
   color: rgba(128, 128, 128, 0.932);
   margin: 0px 30px;
+}
+
+#dropdown-searchBar{
+  background-color: rgba(211, 211, 211, 0);
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+  padding: 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-right: 1250px;
+  text-wrap: nowrap;
 }
