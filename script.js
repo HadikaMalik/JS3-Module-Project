@@ -1,11 +1,18 @@
 // Level 300
 
+const dropDownMenuForEpisode = document.getElementById("select");
+const backToShowsButton = document.getElementById("back-to-shows");
+
+
 async function getAllEpisodes(selectedShowId) {
+  console.log(selectedShowId);
   try {
     if (!state.episodesByShowId[selectedShowId]) {
+      console.log(state.episodesByShowId);
       const response = await fetch(`https://api.tvmaze.com/shows/${selectedShowId}/episodes`);
 
       if (!response.ok) {
+        console.log("response is not okay");
         throw new Error(`Failed to fetch data. Status: ${response.status}`);
       }
 
@@ -14,10 +21,12 @@ async function getAllEpisodes(selectedShowId) {
       state.allEpisodes = episodes;
       return episodes;
     } else {
+      console.log(state.episodesByShowId[selectedShowId]);
       return state.episodesByShowId[selectedShowId];
     }
   }
   catch (error) {
+    console.log("error");
     handleFetchError(error);
     return [];
   }
@@ -48,6 +57,7 @@ function setup() {
   getAllShows().then((shows) => {
     makePageForShows(shows);
     populateShowSelect();
+    setupBackToShowsButton();
   });
 }
 
@@ -56,6 +66,9 @@ function makePageForShows(showList) {
   rootElem.innerHTML = "";
 
   showList.sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }));
+
+  const backToShowsButton = document.getElementById("back-to-shows");
+  backToShowsButton.style.display = state.episodesPage ? "inline" : "none";
 
   showList.forEach((show) => {
     const showDiv = document.createElement("div");
@@ -85,14 +98,14 @@ function makePageForShows(showList) {
     showDiv.appendChild(showRating);
     showDiv.appendChild(showRuntime);
 
-    const backToShowsButton = document.getElementById("back-to-shows");
-
     showDiv.addEventListener("click", async function () {
+      dropDownMenuForEpisode.style.display = "block"
+
       state.allEpisodes = [];
       dropDownMenuForEpisode.innerHTML = "";
 
-      const episodes = await getAllEpisodes(show.id);
-      render(episodes);
+      state.allEpisodes = await getAllEpisodes(show.id);
+      render();
 
       state.selectedShowId = show.id;
       state.episodesPage = true;
@@ -101,22 +114,6 @@ function makePageForShows(showList) {
 
       const showSelectElement = document.getElementById("show-select");
       showSelectElement.style.display = "none";
-    });
-
-    backToShowsButton.addEventListener("click", function(){
-      backToShowsButton.style.display = "none";
-
-      state.episodesPage = false;
-      state.searchTerm = '';
-      state.selectedShowId = '';
-
-      getAllShows().then((shows) => {
-        makePageForShows(shows);
-        populateShowSelect();
-      });
-
-      const showSelectElement = document.getElementById("show-select");
-      showSelectElement.style.display = "block";
     });
 
     rootElem.appendChild(showDiv);
@@ -169,6 +166,7 @@ const state = {
 };
 
 function render() {
+  console.log(state.allEpisodes);
   const filteredEpisodes = state.allEpisodes.filter(function (episode) {
     return episode.name.toLowerCase().includes(state.searchTerm.toLowerCase()) || episode.summary.toLowerCase().includes(state.searchTerm.toLowerCase());
   });
@@ -203,10 +201,11 @@ function populateShowSelect() {
     }
     else {
       state.selectedShowId = selectedValueForShow;
-      const episodes = await getAllEpisodes(selectedValueForShow);
-      render(episodes);
+      state.allEpisodes = await getAllEpisodes(selectedValueForShow);
+      render();
       state.episodesPage = true;
       showSelectElement.style.display = "none";
+      backToShowsButton.style.display = "block";
     }
   });
 
@@ -219,7 +218,7 @@ function populateShowSelect() {
     showSelectElement.appendChild(option);
   });
 
- showSelectElement.addEventListener("change", async function () {
+  showSelectElement.addEventListener("change", async function () {
     const selectedValueForShow = showSelectElement.value;
 
     state.allEpisodes = [];
@@ -239,7 +238,6 @@ function populateShowSelect() {
 }
 
 //function for drop down menu for select your episode 
-const dropDownMenuForEpisode = document.getElementById("select");
 dropDownMenuForEpisode.addEventListener("change", function () {
   const selectedValueForEpisode = dropDownMenuForEpisode.value;
 
@@ -262,6 +260,29 @@ function navigateToEpisode(episode) {
       episodeElement.scrollIntoView({ behavior: "smooth" });
     }
   }
+}
+
+function setupBackToShowsButton() {
+
+  backToShowsButton.addEventListener("click", function () {
+    backToShowsButton.style.display = "none";
+
+    dropDownMenuForEpisode.style.display = "none"
+    document.getElementById("search-info").textContent = "";
+
+    state.episodesPage = false;
+    state.searchTerm = '';
+    state.selectedShowId = '';
+
+    getAllShows().then((shows) => {
+      makePageForShows(shows);
+      populateShowSelect();
+    });
+
+    const showSelectElement = document.getElementById("show-select");
+    showSelectElement.style.display = "block";
+
+  });
 }
 
 window.onload = setup;
