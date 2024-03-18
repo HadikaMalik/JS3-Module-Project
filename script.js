@@ -66,6 +66,7 @@ function makePageForShows(showList) {
 
   showList.sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }));
 
+  episodeInput.style.display = state.episodesPage ? "inline" : "none";
   dropDownMenuForEpisode.style.display = state.episodesPage ? "inline" : "none";
   const backToShowsButton = document.getElementById("back-to-shows");
   backToShowsButton.style.display = state.episodesPage ? "inline" : "none";
@@ -175,6 +176,7 @@ function render() {
 
   document.getElementById("search-info").textContent = `Displaying ${filteredEpisodes.length} / ${state.allEpisodes.length}`;
 
+  episodeInput.style.display = state.episodesPage ? "inline" : "block";
   dropDownMenuForEpisode.style.display = state.episodesPage ? "inline" : "block"; 
 
   const showSelectElement = document.getElementById("show-select");
