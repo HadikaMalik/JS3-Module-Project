@@ -66,6 +66,7 @@ function makePageForShows(showList) {
 
   showList.sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }));
 
+  showInput.style.display = state.episodesPage ? "none" : "block";
   episodeInput.style.display = state.episodesPage ? "inline" : "none";
   dropDownMenuForEpisode.style.display = state.episodesPage ? "inline" : "none";
   const backToShowsButton = document.getElementById("back-to-shows");
@@ -167,7 +168,6 @@ const state = {
 };
 
 function render() {
-  console.log(state.allEpisodes);
   const filteredEpisodes = state.allEpisodes.filter(function (episode) {
     return episode.name.toLowerCase().includes(state.searchTerm.toLowerCase()) || episode.summary.toLowerCase().includes(state.searchTerm.toLowerCase());
   });
@@ -176,12 +176,25 @@ function render() {
 
   document.getElementById("search-info").textContent = `Displaying ${filteredEpisodes.length} / ${state.allEpisodes.length}`;
 
+  showInput.style.display = "none";
   episodeInput.style.display = state.episodesPage ? "inline" : "block";
   dropDownMenuForEpisode.style.display = state.episodesPage ? "inline" : "block"; 
-
-  const showSelectElement = document.getElementById("show-select");
-  showSelectElement.style.display = state.episodesPage ? "none" : "block";
 };
+
+function renderForShows(){
+  const filteredShows = state.allShows.filter(function (show){
+    return show.name.toLowerCase().includes(state.searchTerm.toLowerCase()) || show.summary.toLowerCase().includes(state.searchTerm.toLowerCase());
+  });
+  makePageForShows(filteredShows);
+  document.getElementById("search-info-show").textContent = `Displaying ${filteredShows.length}/${state.allShows.length}`;
+  document.getElementById("search-info-show").style.display = state.episodesPage ? "block" : "inline";
+}
+
+const showInput = document.querySelector("#q-show");
+showInput.addEventListener("input", function(){
+  state.searchTerm = showInput.value.toLowerCase();
+  renderForShows();
+})
 
 const episodeInput = document.querySelector("#q");
 
