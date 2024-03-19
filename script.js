@@ -187,7 +187,7 @@ function render() {
 
 function renderForShows() {
   const filteredShows = state.allShows.filter(function (show) {
-    return show.name.toLowerCase().includes(state.searchTerm.toLowerCase()) || show.summary.toLowerCase().includes(state.searchTerm.toLowerCase());
+    return show.name.toLowerCase().includes(state.searchTerm.toLowerCase()) || show.summary.toLowerCase().includes(state.searchTerm.toLowerCase() || show.genres.toLowerCase().includes(state.searchTerm.toLowerCase()));
   });
   makePageForShows(filteredShows);
   document.getElementById("search-info-show").textContent = `Displaying ${filteredShows.length}/${state.allShows.length}`;
