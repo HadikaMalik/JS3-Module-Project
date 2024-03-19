@@ -254,6 +254,7 @@ function populateShowSelect() {
 
       // Hide the "select your show" dropdown
       showSelectElement.style.display = "none";
+      document.getElementById("search-info-show").style.display = "none";
     }
   });
 }
