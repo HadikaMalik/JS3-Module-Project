@@ -57,6 +57,7 @@ function setup() {
     makePageForShows(shows);
     populateShowSelect();
     setupBackToShowsButton();
+    renderForShows();
   });
 }
 
@@ -116,6 +117,9 @@ function makePageForShows(showList) {
 
       const showSelectElement = document.getElementById("show-select");
       showSelectElement.style.display = "none";
+
+      document.getElementById("search-info-show").textContent = `Displaying ${show.length}`;
+      document.getElementById("search-info-show").style.display = "none";
     });
 
     rootElem.appendChild(showDiv);
@@ -178,11 +182,11 @@ function render() {
 
   showInput.style.display = "none";
   episodeInput.style.display = state.episodesPage ? "inline" : "block";
-  dropDownMenuForEpisode.style.display = state.episodesPage ? "inline" : "block"; 
+  dropDownMenuForEpisode.style.display = state.episodesPage ? "inline" : "block";
 };
 
-function renderForShows(){
-  const filteredShows = state.allShows.filter(function (show){
+function renderForShows() {
+  const filteredShows = state.allShows.filter(function (show) {
     return show.name.toLowerCase().includes(state.searchTerm.toLowerCase()) || show.summary.toLowerCase().includes(state.searchTerm.toLowerCase());
   });
   makePageForShows(filteredShows);
@@ -191,7 +195,7 @@ function renderForShows(){
 }
 
 const showInput = document.querySelector("#q-show");
-showInput.addEventListener("input", function(){
+showInput.addEventListener("input", function () {
   state.searchTerm = showInput.value.toLowerCase();
   renderForShows();
 })
@@ -294,6 +298,7 @@ function setupBackToShowsButton() {
     getAllShows().then((shows) => {
       makePageForShows(shows);
       populateShowSelect();
+      renderForShows();
     });
 
     const showSelectElement = document.getElementById("show-select");
